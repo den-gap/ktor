@@ -76,19 +76,6 @@ public actual suspend fun ByteReadChannel.copyTo(dst: ByteWriteChannel, limit: L
 }
 
 internal class ByteChannelJS(initial: ChunkBuffer, autoFlush: Boolean) : ByteChannelSequentialBase(initial, autoFlush) {
-    private var attachedJob: Job? = null
-
-    @OptIn(InternalCoroutinesApi::class)
-    override fun attachJob(job: Job) {
-        attachedJob?.cancel()
-        attachedJob = job
-        job.invokeOnCompletion(onCancelling = true) { cause ->
-            attachedJob = null
-            if (cause != null) {
-                cancel(cause)
-            }
-        }
-    }
 
     override suspend fun readAvailable(dst: ArrayBuffer, offset: Int, length: Int): Int {
         return if (readable.isEmpty) {

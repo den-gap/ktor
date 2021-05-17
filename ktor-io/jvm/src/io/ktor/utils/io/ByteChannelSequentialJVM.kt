@@ -12,21 +12,6 @@ public class ByteChannelSequentialJVM(
     autoFlush: Boolean
 ) : ByteChannelSequentialBase(initial, autoFlush) {
 
-    @Volatile
-    private var attachedJob: Job? = null
-
-    @OptIn(InternalCoroutinesApi::class)
-    override fun attachJob(job: Job) {
-        attachedJob?.cancel()
-        attachedJob = job
-        job.invokeOnCompletion(onCancelling = true) { cause ->
-            attachedJob = null
-            if (cause != null) {
-                cancel(cause)
-            }
-        }
-    }
-
     override suspend fun writeAvailable(src: ByteBuffer): Int {
         val rc = tryWriteAvailable(src)
         return when {
@@ -60,7 +45,7 @@ public class ByteChannelSequentialJVM(
         val srcRemaining = src.remaining()
         val availableForWrite = availableForWrite
 
-        return when {
+        val written = when {
             closed -> throw closedCause ?: ClosedSendChannelException("Channel closed for write")
             srcRemaining == 0 -> 0
             srcRemaining <= availableForWrite -> {
@@ -76,6 +61,9 @@ public class ByteChannelSequentialJVM(
                 availableForWrite
             }
         }
+
+        afterWrite(written)
+        return written
     }
 
     override suspend fun readAvailable(dst: ByteBuffer): Int {
@@ -86,9 +74,7 @@ public class ByteChannelSequentialJVM(
     }
 
     override fun readAvailable(min: Int, block: (ByteBuffer) -> Unit): Int {
-        if (closed) {
-            throw closedCause ?: ClosedSendChannelException("Channel closed for read")
-        }
+        closedCause?.let { throw it }
 
         if (availableForRead < min) {
             return -1
@@ -176,12 +162,18 @@ public class ByteChannelSequentialJVM(
                 channel.prepareFlushedBytes()
             }
 
-            val head = channel.readable.head
-            if (head.readRemaining < skip + atLeast) return null
+            var current = channel.readable.head
+            var skipRemaining = skip
+            while (skipRemaining >= current.readRemaining) {
+                skipRemaining -= current.readRemaining
+                current = current.next ?: return null
+            }
 
-            val buffer = head.memory.buffer.slice()
-            buffer.position(head.readPosition + skip)
-            buffer.limit(head.writePosition)
+            if (current.readRemaining - skipRemaining < atLeast) return null
+
+            val buffer = current.memory.buffer.slice()
+            buffer.position(current.readPosition + skipRemaining)
+            buffer.limit(current.writePosition)
             return buffer
         }
     }

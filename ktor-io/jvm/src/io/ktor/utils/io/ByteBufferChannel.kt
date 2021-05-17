@@ -1618,7 +1618,7 @@ internal open class ByteBufferChannel(
     }
 
     override suspend fun read(min: Int, consumer: (ByteBuffer) -> Unit) {
-        require(min >= 0) { "min should be positive or zero" }
+        require(min > 0) { "Min should be positive" }
 
         val read = reading {
             val av = it.availableForRead

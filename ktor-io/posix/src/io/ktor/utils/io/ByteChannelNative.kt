@@ -63,20 +63,8 @@ internal class ByteChannelNative(
     autoFlush: Boolean,
     pool: ObjectPool<ChunkBuffer> = ChunkBuffer.Pool
 ) : ByteChannelSequentialBase(initial, autoFlush, pool) {
-    private var attachedJob: Job? by shared(null)
-
     init {
         makeShared()
-    }
-
-    @OptIn(InternalCoroutinesApi::class)
-    override fun attachJob(job: Job) {
-        attachedJob?.cancel()
-        attachedJob = job
-        job.invokeOnCompletion(onCancelling = true) { cause ->
-            attachedJob = null
-            if (cause != null) cancel(cause)
-        }
     }
 
     override suspend fun readAvailable(dst: CPointer<ByteVar>, offset: Int, length: Int): Int {

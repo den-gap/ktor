@@ -1,8 +1,8 @@
 package io.ktor.utils.io.internal
 
-import io.ktor.utils.io.ByteChannelSequentialBase
-import io.ktor.utils.io.close
-import io.ktor.utils.io.core.internal.ChunkBuffer
+import io.ktor.utils.io.*
+import io.ktor.utils.io.core.internal.*
+import kotlinx.coroutines.*
 
 internal suspend fun ByteChannelSequentialBase.joinToImpl(dst: ByteChannelSequentialBase, closeOnEnd: Boolean) {
     copyToSequentialImpl(dst, Long.MAX_VALUE)
@@ -16,6 +16,11 @@ internal suspend fun ByteChannelSequentialBase.joinToImpl(dst: ByteChannelSequen
  */
 internal suspend fun ByteChannelSequentialBase.copyToSequentialImpl(dst: ByteChannelSequentialBase, limit: Long): Long {
     require(this !== dst)
+
+    val copyJob = Job()
+    attachJob(copyJob)
+    dst.attachJob(copyJob)
+
     if (closedCause != null) {
         dst.close(closedCause)
         return 0L
@@ -47,6 +52,7 @@ internal suspend fun ByteChannelSequentialBase.copyToSequentialImpl(dst: ByteCha
         remainingLimit -= copied
     }
 
+    flush()
     return limit - remainingLimit
 }
 
