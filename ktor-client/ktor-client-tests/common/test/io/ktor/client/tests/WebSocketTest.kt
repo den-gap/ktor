@@ -118,7 +118,7 @@ class WebSocketTest : ClientLoader() {
                 assertEquals(CUSTOM_HEADER_VALUE, header)
             }
         }
-    }
+
 
     @Test
     fun testWsHandshakeHeadersWithMultipleValues() =
@@ -143,7 +143,7 @@ class WebSocketTest : ClientLoader() {
                 assertEquals(listOf(CUSTOM_HEADER_VALUE, CUSTOM_HEADER_VALUE), header)
             }
         }
-    }
+
 
     @Test
     fun testConfiguration() = clientTests(ENGINES_WITHOUT_WEBSOCKETS) {
