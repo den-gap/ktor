@@ -195,10 +195,6 @@ public actual interface ByteReadChannel {
     ): Long
 
     public actual companion object {
-        public actual val Empty: ByteReadChannel by lazy {
-            ByteChannelJS(ChunkBuffer.Empty, false).apply {
-                close(null)
-            }
-        }
+        public actual val Empty: ByteReadChannel = TODO()
     }
 }

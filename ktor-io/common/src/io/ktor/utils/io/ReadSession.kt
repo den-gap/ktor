@@ -135,9 +135,9 @@ private suspend fun ByteReadChannel.requestBufferFallback(desiredSize: Int): Chu
 
 internal interface HasReadSession {
     @Suppress("DEPRECATION")
-    public fun startReadSession(): SuspendableReadSession
+    fun startReadSession(): SuspendableReadSession
 
-    public fun endReadSession()
+    fun endReadSession()
 }
 
 @Suppress("DEPRECATION", "NOTHING_TO_INLINE")

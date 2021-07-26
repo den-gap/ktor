@@ -231,12 +231,6 @@ public actual interface ByteReadChannel {
         /**
          * Empty closed [ByteReadChannel].
          */
-        public actual val Empty: ByteReadChannel = ByteChannelNative(
-            ChunkBuffer.Empty,
-            false,
-            ChunkBuffer.EmptyPool
-        ).apply {
-            close(null)
-        }
+        public actual val Empty: ByteReadChannel = TODO()
     }
 }
