@@ -568,6 +568,7 @@ public abstract class ContentTestSuite<TEngine : ApplicationEngine, TConfigurati
                         is PartData.FileItem -> response.append(
                             "file:${part.name},${part.originalFileName},${part.provider().readText()}\n"
                         )
+                        else -> return@forEach
                     }
 
                     part.dispose()
@@ -631,6 +632,7 @@ public abstract class ContentTestSuite<TEngine : ApplicationEngine, TConfigurati
                             "file:${part.name},${part.originalFileName}," +
                                 "${part.streamProvider().bufferedReader().lineSequence().count()}\n"
                         )
+                        else -> return@forEachPart
                     }
 
                     part.dispose()
