@@ -18,19 +18,6 @@ package io.ktor.utils.io
 
 import io.ktor.utils.io.charsets.*
 import io.ktor.utils.io.core.*
-import kotlinx.coroutines.*
-
-/**
- * Channel for asynchronous reading and writing of sequences of bytes.
- * This is a buffered **single-reader single-writer channel**.
- *
- * Read operations can be invoked concurrently with write operations, but multiple reads or multiple writes
- * cannot be invoked concurrently with themselves. Exceptions are [close] and [flush] which can be invoked
- * concurrently with any other operations and between themselves at any time.
- */
-public interface ByteChannel : ByteReadChannel, ByteWriteChannel {
-    public fun attachJob(job: Job)
-}
 
 /**
  * Creates buffered channel for asynchronous reading and writing of sequences of bytes.

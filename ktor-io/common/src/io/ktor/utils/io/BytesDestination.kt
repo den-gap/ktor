@@ -7,9 +7,11 @@ package io.ktor.utils.io
 import io.ktor.utils.io.bits.*
 
 public abstract class BytesDestination {
+    public abstract val isClosed: Boolean
+
     public abstract val closeReason: Throwable?
 
-    protected abstract fun write(memory: Memory)
+    protected abstract fun write(memory: Memory, startPosition: Int, endPosition: Int): Int
 
     public abstract suspend fun flush()
 

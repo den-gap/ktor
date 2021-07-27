@@ -10,6 +10,8 @@ public class Bytes
 
 public abstract class BytesSource {
 
+    public abstract val isClosed: Boolean
+
     public abstract val closeReason: Throwable?
 
     protected abstract fun read(): Memory

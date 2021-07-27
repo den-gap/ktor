@@ -74,7 +74,7 @@ internal class RequestBodyHandler(
     fun newChannel(): ByteReadChannel {
         val bc = ByteChannel()
         tryOfferChannelOrToken(bc)
-        return bc
+        return bc.source
     }
 
     private fun tryOfferChannelOrToken(token: Any) {
