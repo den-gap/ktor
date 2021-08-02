@@ -5,6 +5,7 @@
 package io.ktor.client.utils
 
 import io.ktor.util.*
+import io.ktor.utils.io.*
 import kotlinx.atomicfu.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.scheduling.*
@@ -44,25 +45,22 @@ internal class ClosableBlockingDispatcher(
 
     val closed: Boolean get() = _closed.value
 
-    private val dispatcher = ExperimentalCoroutineDispatcher(threadCount, threadCount, dispatcherName)
-    private val blocking = dispatcher.blocking(threadCount)
+    private val dispatcher = KtorDispatchers.createIoDispatcher(dispatcherName, threadCount)
 
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        return blocking.dispatch(context, block)
+        return dispatcher.dispatch(context, block)
     }
 
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
-        return blocking.isDispatchNeeded(context)
+        return dispatcher.isDispatchNeeded(context)
     }
 
     override fun dispatchYield(context: CoroutineContext, block: Runnable) {
-        blocking.dispatchYield(context, block)
+        dispatcher.dispatchYield(context, block)
     }
 
     override fun close() {
         if (!_closed.compareAndSet(false, true)) return
-
-        dispatcher.close()
         // blocking dispatcher is a view and doesn't allow close
     }
 }

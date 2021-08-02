@@ -5,8 +5,10 @@
 package io.ktor.tests.http.cio
 
 import io.ktor.http.cio.internals.*
+import io.ktor.utils.io.*
 import kotlinx.atomicfu.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.debug.junit4.*
 import org.junit.Rule
 import java.time.*
@@ -99,7 +101,7 @@ class WeakTimeoutQueueTest {
     private val executed = atomic(0)
 
     @Test
-    fun testAlreadyCancelledParent(): Unit = runBlocking(Dispatchers.IO) {
+    fun testAlreadyCancelledParent(): Unit = runBlocking(KtorDispatchers.IO) {
         launch {
             cancel("Already cancelled")
 

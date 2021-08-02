@@ -25,7 +25,7 @@ class ServerPipelineTest : CoroutineScope {
     val testName = TestName()
 
     @OptIn(InternalCoroutinesApi::class)
-    private val dispatcher = ExperimentalCoroutineDispatcher(8)
+    private val dispatcher = KtorDispatchers.createIoDispatcher("Test dispatcher", 8)
 
     private val job = SupervisorJob()
 
@@ -44,7 +44,7 @@ class ServerPipelineTest : CoroutineScope {
             job.join()
         }
         job.invokeOnCompletion {
-            dispatcher.close()
+//            dispatcher.close()
         }
     }
 

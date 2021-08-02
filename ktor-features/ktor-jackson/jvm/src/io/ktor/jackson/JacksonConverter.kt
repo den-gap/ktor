@@ -60,7 +60,7 @@ public class JacksonConverter(private val objectmapper: ObjectMapper = jacksonOb
         val request = context.subject
         val type = request.typeInfo
         val value = request.value as? ByteReadChannel ?: return null
-        return withContext(Dispatchers.IO) {
+        return withContext(KtorDispatchers.Default) {
             val reader = value.toInputStream().reader(context.call.request.contentCharset() ?: Charsets.UTF_8)
             objectmapper.readValue(reader, type.jvmErasure.javaObjectType)
         }

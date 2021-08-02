@@ -19,7 +19,7 @@ import kotlin.coroutines.*
 @Suppress("KDocMissingDocumentation")
 public class TestHttpClientEngine(override val config: TestHttpClientConfig) : HttpClientEngineBase("ktor-test") {
 
-    override val dispatcher = Dispatchers.IO
+    override val dispatcher = KtorDispatchers.Default
 
     override val supportedCapabilities = emptySet<HttpClientEngineCapability<*>>()
 

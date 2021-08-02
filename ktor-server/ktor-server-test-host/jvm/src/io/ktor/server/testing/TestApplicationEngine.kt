@@ -41,7 +41,7 @@ public class TestApplicationEngine(
      * @property dispatcher to run handlers and interceptors on
      */
     public class Configuration : BaseApplicationEngine.Configuration() {
-        var dispatcher: CoroutineContext = Dispatchers.IO
+        var dispatcher: CoroutineContext = KtorDispatchers.Default
     }
 
     private val configuration = Configuration().apply(configure)
@@ -263,7 +263,7 @@ public class TestApplicationEngine(
         closeRequest: Boolean = true,
         setup: TestApplicationRequest.() -> Unit
     ): TestApplicationCall =
-        TestApplicationCall(application, readResponse, closeRequest, Dispatchers.IO).apply { setup(request) }
+        TestApplicationCall(application, readResponse, closeRequest, KtorDispatchers.Default).apply { setup(request) }
 }
 
 /**

@@ -106,7 +106,7 @@ public fun TestApplicationRequest.setBody(value: ByteArray) {
  * Set multipart HTTP request body
  */
 public fun TestApplicationRequest.setBody(boundary: String, parts: List<PartData>) {
-    bodyChannel = writer(Dispatchers.IO) {
+    bodyChannel = writer(KtorDispatchers.Default) {
         if (parts.isEmpty()) return@writer
 
         try {

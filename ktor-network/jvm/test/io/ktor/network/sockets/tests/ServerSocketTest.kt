@@ -104,7 +104,7 @@ class ServerSocketTest : CoroutineScope {
     private fun server(block: suspend (Socket) -> Unit): Job {
         serverSocket = CompletableDeferred()
 
-        val job = launch(Dispatchers.Default, start = CoroutineStart.LAZY) {
+        val job = launch(KtorDispatchers.Default, start = CoroutineStart.LAZY) {
             try {
                 val server = aSocket(selector).tcp().bind(null)
                 this@ServerSocketTest.serverSocket.complete(server)

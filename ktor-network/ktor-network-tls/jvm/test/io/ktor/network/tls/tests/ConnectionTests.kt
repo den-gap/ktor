@@ -36,11 +36,11 @@ class ConnectionTests {
 
     @Test
     fun tlsWithoutCloseTest(): Unit = runBlocking {
-        val selectorManager = ActorSelectorManager(Dispatchers.IO)
+        val selectorManager = ActorSelectorManager(KtorDispatchers.Default)
         val socket = aSocket(selectorManager)
             .tcp()
             .connect("www.google.com", port = 443)
-            .tls(Dispatchers.Default)
+            .tls(KtorDispatchers.Default)
 
         val channel = socket.openWriteChannel()
 
@@ -66,9 +66,9 @@ class ConnectionTests {
         val factory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
         factory.init(keyStore, "changeit".toCharArray())
 
-        val socket = aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
+        val socket = aSocket(ActorSelectorManager(KtorDispatchers.Default)).tcp()
             .connect(InetSocketAddress("chat.freenode.net", 6697))
-            .tls(Dispatchers.IO) {
+            .tls(KtorDispatchers.Default) {
                 addKeyStore(keyStore, "changeit".toCharArray())
             }
 
@@ -129,9 +129,9 @@ class ConnectionTests {
         keyStoreAndPassword: Pair<KeyStore, CharArray>? = null
     ) {
         runBlocking {
-            aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
+            aSocket(ActorSelectorManager(KtorDispatchers.Default)).tcp()
                 .connect(InetSocketAddress("127.0.0.1", port))
-                .tls(Dispatchers.IO) {
+                .tls(KtorDispatchers.Default) {
                     keyStoreAndPassword?.let { addKeyStore(it.first, it.second) }
                     trustManager = trustManagerFactory
                         .trustManagers

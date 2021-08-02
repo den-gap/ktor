@@ -4,6 +4,7 @@
 
 package io.ktor.util
 
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import org.slf4j.*
@@ -28,7 +29,7 @@ private val NonceGeneratorCoroutineName = CoroutineName("nonce-generator")
 
 private val nonceGeneratorJob =
     GlobalScope.launch(
-        context = Dispatchers.IO + NonCancellable + NonceGeneratorCoroutineName,
+        context = KtorDispatchers.Default + NonCancellable + NonceGeneratorCoroutineName,
         start = CoroutineStart.LAZY
     ) {
         val seedChannel = seedChannel

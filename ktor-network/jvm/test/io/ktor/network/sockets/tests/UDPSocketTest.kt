@@ -7,6 +7,7 @@ package io.ktor.network.sockets.tests
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
 import io.ktor.util.network.*
+import io.ktor.utils.io.*
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.debug.junit4.*
@@ -19,7 +20,7 @@ import kotlin.test.Test
 
 class UDPSocketTest : CoroutineScope {
     private val testJob = Job()
-    private val selector = ActorSelectorManager(Dispatchers.Default + testJob)
+    private val selector = ActorSelectorManager(KtorDispatchers.Default + testJob)
 
     @get:Rule
     val timeout = CoroutinesTimeout(1000, cancelOnTimeout = true)
@@ -203,7 +204,7 @@ class UDPSocketTest : CoroutineScope {
 
     @Test
     fun testBind() {
-        val socketBuilder: UDPSocketBuilder = aSocket(ActorSelectorManager(Dispatchers.IO)).udp()
+        val socketBuilder: UDPSocketBuilder = aSocket(ActorSelectorManager(KtorDispatchers.Default)).udp()
         val socket = socketBuilder.bind()
         val port = socket.localAddress.port
         socket.close()

@@ -518,7 +518,7 @@ abstract class ContentTestSuite<TEngine : ApplicationEngine, TConfiguration : Ap
     fun testEchoBlocking() {
         createAndStartServer {
             post("/") {
-                val text = withContext(Dispatchers.IO) { call.receiveStream().bufferedReader().readText() }
+                val text = withContext(KtorDispatchers.Default) { call.receiveStream().bufferedReader().readText() }
                 call.response.status(HttpStatusCode.OK)
                 call.respond(text)
             }
@@ -686,7 +686,7 @@ abstract class ContentTestSuite<TEngine : ApplicationEngine, TConfiguration : Ap
     fun testReceiveInputStream() {
         createAndStartServer {
             post("/") {
-                call.respond(withContext(Dispatchers.IO) { call.receive<InputStream>().reader().readText() })
+                call.respond(withContext(KtorDispatchers.Default) { call.receive<InputStream>().reader().readText() })
             }
         }
 
@@ -706,7 +706,7 @@ abstract class ContentTestSuite<TEngine : ApplicationEngine, TConfiguration : Ap
     fun testRequestContentInputStream() {
         createAndStartServer {
             post("/") {
-                call.respond(withContext(Dispatchers.IO) { call.receiveStream().reader().readText() })
+                call.respond(withContext(KtorDispatchers.Default) { call.receiveStream().reader().readText() })
             }
         }
 

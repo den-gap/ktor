@@ -8,6 +8,7 @@ import io.ktor.application.*
 import io.ktor.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.utils.io.*
 import io.mockk.*
 import io.netty.channel.*
 import io.netty.channel.nio.*
@@ -27,7 +28,7 @@ class NettyConfigurationTest {
         every { env.stop() } just Runs
         every { env.start() } just Runs
         every { env.connectors } returns listOf(EngineConnectorBuilder())
-        every { env.parentCoroutineContext } returns Dispatchers.Default
+        every { env.parentCoroutineContext } returns KtorDispatchers.Default
         return env
     }
 

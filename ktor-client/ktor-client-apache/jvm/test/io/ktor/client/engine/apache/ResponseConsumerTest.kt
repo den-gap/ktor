@@ -15,7 +15,7 @@ import java.nio.*
 import kotlin.test.*
 
 class ResponseConsumerTest {
-    private val parentContext = Dispatchers.Main + Job()
+    private val parentContext = KtorDispatchers.Default + Job()
 
     @Test
     fun testConsumeContent() {

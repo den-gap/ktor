@@ -5,6 +5,7 @@
 package io.ktor.tests.utils
 
 import io.ktor.util.pipeline.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import kotlin.test.*
 
@@ -333,7 +334,7 @@ class PipelineTest {
         val pipeline = pipeline()
         pipeline.intercept { subject ->
             events.add("intercept1 $subject")
-            withContext(Dispatchers.Default) {
+            withContext(KtorDispatchers.Default) {
                 events.add("future1 $subject")
                 proceed()
             }
@@ -354,7 +355,7 @@ class PipelineTest {
         val pipeline = pipeline()
         pipeline.intercept { subject ->
             events.add("intercept1 $subject")
-            withContext(Dispatchers.Default) {
+            withContext(KtorDispatchers.Default) {
                 events.add("future1 $subject")
                 proceed()
             }
@@ -364,7 +365,7 @@ class PipelineTest {
         pipeline.intercept {
             val secondary = pipeline()
             secondary.intercept { subject ->
-                withContext(Dispatchers.Default) {
+                withContext(KtorDispatchers.Default) {
                     events.add("intercept2 $subject")
                 }
             }

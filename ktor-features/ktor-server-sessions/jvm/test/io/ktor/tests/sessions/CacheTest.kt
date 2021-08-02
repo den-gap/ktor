@@ -6,6 +6,7 @@ package io.ktor.tests.sessions
 
 import io.ktor.server.netty.*
 import io.ktor.sessions.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.*
@@ -36,7 +37,7 @@ class CacheTest {
         val cache = BaseCache<Int, String> { if (it == 0) latch.await(); it.toString() }
 
         assertEquals("1", cache.getOrCompute(1))
-        val th = launch(Dispatchers.Default) {
+        val th = launch(KtorDispatchers.Default) {
             ref.set(cache.getOrCompute(0))
         }
 

@@ -39,7 +39,7 @@ public data class HttpServerSettings(
 @Suppress("KDocMissingDocumentation", "unused")
 @Deprecated("Binary compatibility.", level = DeprecationLevel.HIDDEN)
 public fun httpServer(settings: HttpServerSettings, parentJob: Job? = null, handler: HttpRequestHandler): HttpServer {
-    val parent = parentJob ?: Dispatchers.Default
+    val parent = parentJob ?: KtorDispatchers.Default
     return CoroutineScope(parent).httpServer(settings, handler = handler)
 }
 
@@ -55,7 +55,7 @@ public fun httpServer(
         throw UnsupportedOperationException()
     }
 
-    val parent = parentJob ?: Dispatchers.Default
+    val parent = parentJob ?: KtorDispatchers.Default
     return CoroutineScope(parent).httpServer(settings, handler = handler)
 }
 

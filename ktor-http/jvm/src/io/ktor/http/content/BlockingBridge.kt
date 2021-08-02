@@ -4,6 +4,7 @@
 
 package io.ktor.http.content
 
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import java.lang.reflect.*
 
@@ -41,7 +42,7 @@ private fun safeToRunInPlace(): Boolean {
 }
 
 private suspend fun withBlockingAndRedispatch(block: suspend () -> Unit) {
-    withContext(Dispatchers.IO) {
+    withContext(KtorDispatchers.Default) {
         block()
     }
 }

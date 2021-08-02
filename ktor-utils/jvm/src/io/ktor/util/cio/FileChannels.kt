@@ -26,7 +26,7 @@ import kotlin.coroutines.*
 public fun File.readChannel(
     start: Long = 0,
     endInclusive: Long = -1,
-    coroutineContext: CoroutineContext = Dispatchers.IO
+    coroutineContext: CoroutineContext = KtorDispatchers.Default
 ): ByteReadChannel {
     val fileLength = length()
     val file = RandomAccessFile(this@readChannel, "r")
@@ -105,7 +105,7 @@ public fun File.writeChannel(
  * a coroutine dispatcher that is properly configured for blocking IO.
  */
 public fun File.writeChannel(
-    coroutineContext: CoroutineContext = Dispatchers.IO
+    coroutineContext: CoroutineContext = KtorDispatchers.Default
 ): ByteWriteChannel = GlobalScope.reader(CoroutineName("file-writer") + coroutineContext, autoFlush = true) {
     @Suppress("BlockingMethodInNonBlockingContext")
     RandomAccessFile(this@writeChannel, "rw").use { file ->

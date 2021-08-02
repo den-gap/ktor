@@ -6,6 +6,7 @@ package io.ktor.network.sockets
 
 import io.ktor.network.selector.*
 import io.ktor.network.util.*
+import io.ktor.utils.io.*
 import io.ktor.utils.io.core.*
 import io.ktor.utils.io.pool.*
 import kotlinx.atomicfu.*
@@ -74,7 +75,7 @@ internal class DatagramSendChannel(
 
     override suspend fun send(element: Datagram) {
         lock.withLock {
-            withContext(Dispatchers.IO) {
+            withContext(KtorDispatchers.Default) {
                 DefaultDatagramByteBufferPool.useInstance { buffer ->
                     element.writeMessageTo(buffer)
 

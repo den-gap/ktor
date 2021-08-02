@@ -41,7 +41,7 @@ public class GsonConverter(private val gson: Gson = Gson()) : ContentConverter {
             throw ExcludedTypeGsonException(javaType)
         }
 
-        return withContext(Dispatchers.IO) {
+        return withContext(KtorDispatchers.Default) {
             val reader = channel.toInputStream().reader(context.call.request.contentCharset() ?: Charsets.UTF_8)
             gson.fromJson(reader, javaType.javaObjectType) ?: throw UnsupportedNullValuesException()
         }

@@ -162,7 +162,7 @@ public abstract class BaseApplicationResponse(final override val call: Applicati
             // Call user code to send data
 //            val before = totalBytesWritten
             try {
-                withContext(Dispatchers.IO) {
+                withContext(KtorDispatchers.Default) {
                     content.writeTo(this@use)
                 }
             } catch (closed: ClosedWriteChannelException) {

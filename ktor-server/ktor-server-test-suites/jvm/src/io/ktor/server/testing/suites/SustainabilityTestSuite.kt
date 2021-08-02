@@ -603,7 +603,7 @@ abstract class SustainabilityTestSuite<TEngine : ApplicationEngine, TConfigurati
             // we use socket instead of http client to ensure we really send too big header
             // since a client may crash itself or do something unsuitable for the test here
 
-            launch(Dispatchers.IO) {
+            launch(KtorDispatchers.Default) {
                 getOutputStream().writer().apply {
                     write("GET / HTTP/1.1\r\n")
                     write("Host: localhost:$port\r\n")

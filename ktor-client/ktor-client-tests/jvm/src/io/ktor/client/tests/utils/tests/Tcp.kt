@@ -116,7 +116,7 @@ private suspend fun connectAndProcessTunnel(
     output: ByteWriteChannel,
     input: ByteReadChannel
 ) {
-    SelectorManager(Dispatchers.IO).use { selector ->
+    SelectorManager(KtorDispatchers.Default).use { selector ->
         aSocket(selector).tcp().connect(host, port).use { destination ->
             coroutineScope {
                 launch {

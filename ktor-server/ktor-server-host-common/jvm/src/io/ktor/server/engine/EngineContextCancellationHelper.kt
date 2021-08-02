@@ -5,6 +5,7 @@
 package io.ktor.server.engine
 
 import io.ktor.util.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 
 /**
@@ -26,7 +27,7 @@ public fun Job.launchOnCancellation(block: suspend () -> Unit): CompletableJob {
     val deferred: CompletableJob = Job(parent = this)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    GlobalScope.launch(this + Dispatchers.IO, start = CoroutineStart.UNDISPATCHED) {
+    GlobalScope.launch(this + KtorDispatchers.Default, start = CoroutineStart.UNDISPATCHED) {
         var cancelled = false
         try {
             deferred.join()

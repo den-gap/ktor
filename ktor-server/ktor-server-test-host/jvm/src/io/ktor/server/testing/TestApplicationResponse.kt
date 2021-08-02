@@ -104,7 +104,7 @@ public class TestApplicationResponse(
     }
 
     private fun launchResponseJob(source: ByteReadChannel) {
-        responseJob = async(Dispatchers.Default) {
+        responseJob = async(KtorDispatchers.Default) {
             byteContent = source.toByteArray()
         }
     }
@@ -139,8 +139,8 @@ public class TestApplicationResponse(
         upgrade.upgrade(
             call.receiveChannel(),
             responseChannel(),
-            Dispatchers.Default,
-            Dispatchers.Default
+            KtorDispatchers.Default,
+            KtorDispatchers.Default
         ).invokeOnCompletion {
             webSocketCompleted.complete()
         }

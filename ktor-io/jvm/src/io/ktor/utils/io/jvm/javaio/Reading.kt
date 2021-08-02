@@ -44,7 +44,7 @@ public suspend fun InputStream.copyTo(channel: ByteWriteChannel, limit: Long = L
 @ExperimentalIoApi
 @Suppress("BlockingMethodInNonBlockingContext")
 public fun InputStream.toByteReadChannel(
-    context: CoroutineContext = Dispatchers.IO,
+    context: CoroutineContext = KtorDispatchers.Default,
     pool: ObjectPool<ByteBuffer>
 ): ByteReadChannel = GlobalScope.writer(context, autoFlush = true) {
     val buffer = pool.borrow()
@@ -76,7 +76,7 @@ public fun InputStream.toByteReadChannel(
 @Suppress("BlockingMethodInNonBlockingContext")
 @JvmName("toByteReadChannelWithArrayPool")
 public fun InputStream.toByteReadChannel(
-    context: CoroutineContext = Dispatchers.IO,
+    context: CoroutineContext = KtorDispatchers.Default,
     pool: ObjectPool<ByteArray> = ByteArrayPool
 ): ByteReadChannel = GlobalScope.writer(context, autoFlush = true) {
     val buffer = pool.borrow()

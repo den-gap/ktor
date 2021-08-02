@@ -7,6 +7,7 @@ package io.ktor.network.sockets
 import io.ktor.network.selector.*
 import io.ktor.network.util.*
 import io.ktor.util.network.*
+import io.ktor.utils.io.*
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
@@ -34,7 +35,7 @@ internal class DatagramSocketImpl(
     private val sender: SendChannel<Datagram> = DatagramSendChannel(channel, this)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val receiver: ReceiveChannel<Datagram> = produce(Dispatchers.IO) {
+    private val receiver: ReceiveChannel<Datagram> = produce(KtorDispatchers.Default) {
         try {
             while (true) {
                 channel.send(receiveImpl())

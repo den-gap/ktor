@@ -7,13 +7,14 @@ package io.ktor.client.tests.utils
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
 import io.ktor.network.sockets.Socket
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import java.io.*
 import java.net.*
 import kotlin.coroutines.*
 
 internal class TestTcpServer(val port: Int, handler: suspend (Socket) -> Unit) : CoroutineScope, Closeable {
-    private val selector = ActorSelectorManager(Dispatchers.IO)
+    private val selector = ActorSelectorManager(KtorDispatchers.Default)
     override val coroutineContext: CoroutineContext
 
     init {

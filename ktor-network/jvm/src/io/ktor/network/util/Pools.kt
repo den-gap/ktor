@@ -6,6 +6,7 @@ package io.ktor.network.util
 
 import io.ktor.network.sockets.*
 import io.ktor.util.*
+import io.ktor.utils.io.*
 import io.ktor.utils.io.pool.*
 import io.ktor.utils.io.pool.DirectByteBufferPool
 import kotlinx.coroutines.*
@@ -25,7 +26,7 @@ public val ioThreadGroup: ThreadGroup = ThreadGroup("io-pool-group")
     level = DeprecationLevel.HIDDEN
 )
 public val ioCoroutineDispatcher: CoroutineDispatcher
-    get() = Dispatchers.IO
+    get() = KtorDispatchers.Default
 
 @Suppress("KDocMissingDocumentation")
 @InternalAPI

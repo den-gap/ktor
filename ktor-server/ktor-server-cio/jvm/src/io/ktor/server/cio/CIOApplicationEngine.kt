@@ -8,10 +8,9 @@ import io.ktor.application.*
 import io.ktor.http.cio.*
 import io.ktor.server.cio.backend.*
 import io.ktor.server.engine.*
-import io.ktor.util.*
 import io.ktor.util.pipeline.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.scheduling.*
 
 /**
  * Engine that based on CIO backend
@@ -39,11 +38,10 @@ public class CIOApplicationEngine(
         environment.connectors.size + 1 // number of selectors + 1
     )
 
-    @OptIn(InternalCoroutinesApi::class)
-    private val engineDispatcher = ExperimentalCoroutineDispatcher(corePoolSize)
+    private val engineDispatcher = KtorDispatchers.createIoDispatcher("Ktor CIO engine dispatcher", corePoolSize)
 
-    @OptIn(InternalCoroutinesApi::class)
-    private val userDispatcher = DispatcherWithShutdown(engineDispatcher.blocking(configuration.callGroupSize))
+    private val userDispatcher =
+        KtorDispatchers.createIoDispatcher("Ktor CIO user dispatcher", configuration.callGroupSize)
 
     private val startupJob: CompletableDeferred<Unit> = CompletableDeferred()
     private val stopRequest: CompletableJob = Job()
@@ -98,7 +96,7 @@ public class CIOApplicationEngine(
             try {
                 environment.stop()
             } finally {
-                userDispatcher.completeShutdown()
+//                userDispatcher.completeShutdown()
             }
         }
     }
@@ -123,7 +121,7 @@ public class CIOApplicationEngine(
         } finally {
             @OptIn(InternalCoroutinesApi::class)
             GlobalScope.launch(engineDispatcher) {
-                engineDispatcher.close()
+//                engineDispatcher.close()
             }
         }
     }
@@ -139,7 +137,7 @@ public class CIOApplicationEngine(
 
             if (result == null) {
                 // timeout
-                userDispatcher.prepareShutdown()
+//                userDispatcher.prepareShutdown()
                 serverJob.cancel()
 
                 val forceShutdown = withTimeoutOrNull(timeoutMillis - gracePeriodMillis) {

@@ -83,7 +83,7 @@ class IntegrationTest {
                 rr.release()
             }
 
-            val chunked = encodeChunked(o, Dispatchers.Default)
+            val chunked = encodeChunked(o, KtorDispatchers.Default)
             input.copyAndClose(chunked.channel)
             chunked.join()
         }
