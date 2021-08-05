@@ -11,7 +11,6 @@ kotlin.sourceSets {
         dependencies {
             api(project(":ktor-server:ktor-server-core"))
             api(project(":ktor-server:ktor-server-core", configuration = "testOutput"))
-            implementation(project(":ktor-server:ktor-server-netty"))
         }
     }
 }

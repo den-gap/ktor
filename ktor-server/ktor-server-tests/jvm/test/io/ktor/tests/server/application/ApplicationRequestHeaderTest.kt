@@ -114,31 +114,6 @@ class ApplicationRequestHeaderTest {
     }
 
     @Test
-    fun queryParameterContainingSemicolon(): Unit = runBlocking {
-        val server = embeddedServer(Netty, port = 5555) {
-            routing {
-                get("/") {
-                    assertEquals("01;21", call.request.queryParameters["code"])
-                    call.respond(HttpStatusCode.OK)
-                }
-            }
-        }
-
-        server.start()
-
-        val client = HttpClient(CIO)
-        val response = client.get<HttpResponse> {
-            url {
-                parameters.urlEncodingOption = UrlEncodingOption.NO_ENCODING
-                parameters.append("code", "01;21")
-                port = 5555
-            }
-        }
-        assertEquals(HttpStatusCode.OK, response.status)
-        server.stop(100, 100)
-    }
-
-    @Test
     fun `an application that handles requests to root with parameters`() = withTestApplication {
         on("making a request to /?key1=value1&key2=value2") {
             application.routing {
