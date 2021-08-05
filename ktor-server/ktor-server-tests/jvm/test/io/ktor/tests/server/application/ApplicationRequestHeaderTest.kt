@@ -5,18 +5,11 @@
 package io.ktor.tests.server.application
 
 import io.ktor.application.*
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import io.ktor.server.testing.*
-import kotlinx.coroutines.*
 import kotlin.test.*
 
 class ApplicationRequestHeaderTest {
