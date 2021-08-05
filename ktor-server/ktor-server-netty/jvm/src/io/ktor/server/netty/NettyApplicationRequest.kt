@@ -29,6 +29,7 @@ public abstract class NettyApplicationRequest(
 ) : BaseApplicationRequest(call), CoroutineScope {
 
     public final override val queryParameters: Parameters = object : Parameters {
+        // Last argument sets semicolonIsNormalChar to true that is a fix for https://github.com/netty/netty/issues/8855
         private val decoder = QueryStringDecoder(uri, HttpConstants.DEFAULT_CHARSET, true, 1024, true)
         override val caseInsensitiveName: Boolean get() = true
         override fun getAll(name: String) = decoder.parameters()[name]
