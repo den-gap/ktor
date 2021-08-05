@@ -5,11 +5,18 @@
 package io.ktor.tests.server.application
 
 import io.ktor.application.*
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import io.ktor.server.testing.*
+import kotlinx.coroutines.*
 import kotlin.test.*
 
 class ApplicationRequestHeaderTest {
@@ -104,6 +111,31 @@ class ApplicationRequestHeaderTest {
                 assertEquals(HttpStatusCode.OK, status2)
             }
         }
+    }
+
+    @Test
+    fun queryParameterContainingSemicolon(): Unit = runBlocking {
+        val server = embeddedServer(Netty, port = 5555) {
+            routing {
+                get("/") {
+                    assertEquals("01;21", call.request.queryParameters["code"])
+                    call.respond(HttpStatusCode.OK)
+                }
+            }
+        }
+
+        server.start()
+
+        val client = HttpClient(CIO)
+        val response = client.get<HttpResponse> {
+            url {
+                parameters.urlEncodingOption = UrlEncodingOption.NO_ENCODING
+                parameters.append("code", "01;21")
+                port = 5555
+            }
+        }
+        assertEquals(HttpStatusCode.OK, response.status)
+        server.stop(100, 100)
     }
 
     @Test
